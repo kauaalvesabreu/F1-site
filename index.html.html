@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fórmula 1 — Regulamento, Pistas, Equipes e Pilotos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0e11;
+    --bg-elev:#14171b;
+    --surface:#1b1f24;
+    --surface-2:#20252b;
+    --text:#ecece7;
+    --text-dim:#9aa1a9;
+    --text-dimmer:#666e77;
+    --red:#e4002b;
+    --red-dim:#8f0f24;
+    --gold:#d4a93c;
+    --line:rgba(255,255,255,0.09);
+    --line-strong:rgba(255,255,255,0.16);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      /* Site is intentionally dark-themed regardless of system scheme (pit-wall aesthetic) */
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:70px;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    margin:0;
+    letter-spacing:0.01em;
+    color:#fff;
+  }
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  ::selection{background:var(--red);color:#fff;}
+
+  /* ---------- NAV ---------- */
+  .topnav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(12,14,17,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top,0px);
+  }
+  .nav-inner{
+    max-width:1120px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 20px;
+    overflow-x:auto;
+  }
+  .brand{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-right:18px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .brand-logo{height:28px;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(228,0,43,.25));}
+  .brand .dot{width:9px;height:9px;background:var(--red);border-radius:50%;display:inline-block;}
+  .nav-links{display:flex;gap:2px;flex-shrink:0;}
+  .nav-link{
+    font-size:0.86rem;
+    font-weight:500;
+    color:var(--text-dim);
+    padding:8px 14px;
+    border-radius:3px;
+    white-space:nowrap;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease;
+  }
+  .nav-link:hover{color:var(--text);}
+  .nav-link.active{color:#fff;border-bottom-color:var(--red);}
+
+  /* ---------- LAYOUT ---------- */
+  .page{display:none;}
+  .page.active{display:block;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+  .wrap-narrow{max-width:760px;margin:0 auto;padding:0 20px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    padding:88px 0 72px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-40%;
+    right:-10%;
+    width:70%;
+    height:220%;
+    background:repeating-linear-gradient(
+      115deg,
+      var(--red) 0px, var(--red) 3px,
+      transparent 3px, transparent 42px
+    );
+    opacity:0.5;
+    mask-image:linear-gradient(to left, black, transparent 75%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;}
+  .hero-kicker{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--gold);
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-kicker::before{content:"";width:24px;height:1px;background:var(--gold);display:inline-block;}
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 4.6rem);
+    line-height:0.98;
+    max-width:11ch;
+    margin-bottom:22px;
+  }
+  .hero p{
+    color:var(--text-dim);
+    font-size:1.08rem;
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:0.88rem;
+    padding:12px 22px;
+    border-radius:2px;
+    border:1px solid transparent;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+  }
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:#c40025;}
+  .btn-ghost{border-color:var(--line-strong);color:var(--text);background:transparent;}
+  .btn-ghost:hover{border-color:var(--text-dim);}
+
+  .home-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:64px 0;
+  }
+  @media (max-width:640px){ .home-grid{grid-template-columns:1fr;} }
+  .home-card{
+    background:var(--bg-elev);
+    padding:34px 30px;
+    transition:background .15s ease;
+  }
+  .home-card:hover{background:var(--surface);cursor:pointer;}
+  .home-card .num{font-family:'JetBrains Mono',monospace;color:var(--text-dimmer);font-size:0.82rem;}
+  .home-card h3{font-size:1.5rem;margin:10px 0 10px;}
+  .home-card p{color:var(--text-dim);font-size:0.92rem;margin:0;}
+
+  .home-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);
+    margin-top:20px;
+  }
+  @media (max-width:640px){ .home-stats{grid-template-columns:repeat(2,1fr);} }
+  .stat{padding:26px 4px 10px;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .n{font-family:'JetBrains Mono',monospace;font-size:1.9rem;color:var(--gold);}
+  .stat .l{color:var(--text-dim);font-size:0.82rem;margin-top:4px;}
+
+  section{padding:0 0 8px;}
+  .section-pad{padding:56px 0;}
+  .page-head{padding:52px 0 34px;border-bottom:1px solid var(--line);margin-bottom:40px;}
+  .page-head .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--gold);
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  .page-head .kicker::before{content:"";width:24px;height:1px;background:var(--gold);}
+  .page-head h1{font-size:clamp(2.1rem,5vw,3rem);}
+  .page-head p{color:var(--text-dim);max-width:60ch;margin-top:14px;font-size:1.02rem;}
+
+  /* ---------- REGULATIONS ---------- */
+  .reg-layout{display:grid;grid-template-columns:230px 1fr;gap:48px;padding-bottom:90px;align-items:start;}
+  @media (max-width:820px){ .reg-layout{grid-template-columns:1fr;} }
+  .reg-toc{position:sticky;top:80px;}
+  .reg-toc-label{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-dimmer);margin-bottom:12px;}
+  .reg-toc a{
+    display:block;font-size:0.86rem;color:var(--text-dim);padding:7px 0 7px 14px;
+    border-left:2px solid var(--line);
+  }
+  .reg-toc a:hover{color:var(--text);border-left-color:var(--text-dim);}
+  .reg-block{border-top:1px solid var(--line);padding:44px 0;}
+  .reg-block:first-child{border-top:none;padding-top:0;}
+  .reg-block .rb-num{font-family:'JetBrains Mono',monospace;color:var(--red);font-size:0.82rem;margin-bottom:10px;}
+  .reg-block h2{font-size:1.7rem;margin-bottom:16px;}
+  .reg-block h4{font-size:1rem;color:var(--gold);margin:22px 0 8px;font-family:'Inter',sans-serif;font-weight:600;}
+  .reg-block p{color:var(--text-dim);margin:0 0 12px;max-width:70ch;}
+  .reg-block ul{margin:0 0 12px;padding-left:20px;color:var(--text-dim);}
+  .reg-block li{margin-bottom:6px;max-width:66ch;}
+  .reg-block strong{color:var(--text);font-weight:600;}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:0.9rem;}
+  th{
+    text-align:left;font-family:'JetBrains Mono',monospace;font-weight:500;
+    color:var(--text-dimmer);font-size:0.72rem;padding:8px 12px;
+    border-bottom:1px solid var(--line-strong);
+  }
+  td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--text-dim);}
+  td.n{font-family:'JetBrains Mono',monospace;color:var(--gold);}
+  .table-scroll{overflow-x:auto;}
+
+  .callout{
+    border-left:2px solid var(--red);
+    background:var(--bg-elev);
+    padding:16px 20px;
+    margin:18px 0;
+    font-size:0.9rem;
+    color:var(--text-dim);
+  }
+  .callout strong{color:var(--text);}
+
+  /* ---------- CARD GRIDS (pistas / equipes) ---------- */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:80px;
+  }
+  .card{
+    background:var(--bg-elev);
+    padding:28px 26px 26px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    position:relative;
+  }
+  .track-layout{
+    width:calc(100% + 52px);
+    height:190px;
+    margin:-28px -26px 22px;
+    object-fit:contain;
+    display:block;
+    padding:16px 28px;
+    background:linear-gradient(135deg,#0b0f14,#171c23);
+    border-bottom:1px solid var(--line);
+    filter:contrast(1.05) brightness(1.04);
+    transition:transform .35s ease, opacity .35s ease;
+  }
+  .card:hover .track-layout{transform:scale(1.025);opacity:1;}
+
+  .card-image{
+    width:calc(100% + 52px);
+    height:190px;
+    margin:-28px -26px 22px;
+    object-fit:cover;
+    display:block;
+    filter:saturate(.9) contrast(1.05);
+    opacity:.9;
+    transition:transform .35s ease, opacity .35s ease;
+  }
+  .card:hover .card-image{transform:scale(1.035);opacity:1;}
+  .team-logo{
+    width:64px;height:64px;object-fit:contain;
+    background:rgba(255,255,255,.96);
+    border-radius:10px;padding:7px;
+    border:1px solid var(--line-strong);
+    margin-bottom:14px;
+  }
+  .team-car{
+    width:100%;height:145px;object-fit:contain;
+    background:linear-gradient(135deg,#11151a,#20252b);
+    border-radius:6px;
+    margin:14px 0 18px;
+    padding:8px;
+    border:1px solid var(--line);
+  }
+  .card-link{
+    margin-top:18px;
+    align-self:flex-start;
+    border:1px solid var(--line-strong);
+    padding:9px 13px;
+    font-size:.8rem;
+    color:var(--text);
+    cursor:pointer;
+    background:transparent;
+  }
+  .card-link:hover{border-color:var(--gold);color:#fff;}
+  .track-layout-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--gold);margin:-10px 0 14px;}
+  .card-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:10px;}
+  .card-flag{font-size:1.4rem;line-height:1;}
+  .card h3{font-size:1.32rem;margin-bottom:2px;}
+  .card .subtitle{color:var(--text-dimmer);font-size:0.8rem;font-family:'JetBrains Mono',monospace;}
+  .card p.desc{color:var(--text-dim);font-size:0.9rem;margin:10px 0 16px;flex-grow:1;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:16px;padding-top:14px;border-top:1px solid var(--line);}
+  .stat-row div{font-size:0.78rem;}
+  .stat-row .v{font-family:'JetBrains Mono',monospace;color:var(--gold);display:block;font-size:0.9rem;margin-bottom:2px;}
+  .stat-row .k{color:var(--text-dimmer);}
+
+  .team-card{border-top:3px solid var(--accent, var(--red));}
+  .team-card .card-top{margin-bottom:8px;}
+  .team-meta{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 14px;}
+  .team-meta span{font-size:0.78rem;color:var(--text-dimmer);}
+  .team-meta b{color:var(--text);font-weight:600;}
+  .drivers-tag{
+    display:inline-block;font-size:0.78rem;background:var(--surface-2);
+    padding:5px 10px;border-radius:2px;color:var(--text-dim);margin:2px 6px 0 0;
+  }
+
+  /* ---------- DRIVERS ---------- */
+  .team-group{margin-bottom:64px;}
+  .team-group-head{
+    display:flex;align-items:center;gap:14px;margin-bottom:18px;
+    padding-bottom:12px;border-bottom:1px solid var(--line);
+  }
+  .team-swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .team-group-head h2{font-size:1.4rem;}
+  .team-group-head .tg-meta{color:var(--text-dimmer);font-size:0.82rem;font-family:'JetBrains Mono',monospace;margin-left:auto;}
+  .driver-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+  .driver-card{background:var(--bg-elev);padding:22px 22px 20px;}
+  .driver-card .dnum{font-family:'JetBrains Mono',monospace;color:var(--text-dimmer);font-size:0.78rem;}
+  .driver-card h4{font-size:1.15rem;margin:4px 0 2px;font-family:'Inter',sans-serif;font-weight:700;color:#fff;}
+  .driver-card .nat{color:var(--text-dimmer);font-size:0.78rem;margin-bottom:10px;}
+  .driver-card p{color:var(--text-dim);font-size:0.87rem;margin:0;}
+
+
+  .driver-card{padding:0;overflow:hidden;}
+  .driver-photo{width:100%;height:230px;object-fit:cover;object-position:center top;display:block;background:linear-gradient(135deg,#11151a,#20252b);border-bottom:1px solid var(--line);transition:transform .35s ease,opacity .35s ease;}
+  .driver-card:hover .driver-photo{transform:scale(1.025);opacity:1;}
+  .driver-info{padding:20px 22px 20px;}
+
+  footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--text-dimmer);font-size:0.82rem;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;}
+  }
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+/* Corrige a posição das âncoras do sumário */
+.reg-block{scroll-margin-top:90px;}
+.reg-toc a{cursor:pointer;}
+
+.team-logo{width:100%;height:74px;object-fit:contain;display:block;margin:0 auto 14px;padding:8px 18px;box-sizing:border-box;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:12px;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <div class="brand"><img class="brand-logo" src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg" alt="Fórmula 1" onerror="imgFallback(this, 'driver', 'Fórmula 1')"> PIT&nbsp;LANE</div>
+    <div class="nav-links">
+      <a class="nav-link" data-page="home" href="#home">Início</a>
+      <a class="nav-link" data-page="regulamento" href="#regulamento">Regulamento</a>
+      <a class="nav-link" data-page="pistas" href="#pistas">Pistas</a>
+      <a class="nav-link" data-page="equipes" href="#equipes">Equipes</a>
+      <a class="nav-link" data-page="carros" href="#carros">Carros</a>
+      <a class="nav-link" data-page="pilotos" href="#pilotos">Pilotos</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HOME ============ -->
+<main id="home" class="page">
+  <div class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-kicker">CAMPEONATO MUNDIAL DE FÓRMULA 1</div>
+      <h1>Velocidade,<br>engenharia<br>e história.</h1>
+      <p>Um guia de referência sobre a categoria mais rápida do automobilismo: as regras que governam cada corrida, os circuitos lendários, as equipes que fizeram sua história e os pilotos que disputam o grid hoje.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" data-page="regulamento" href="#regulamento">Ver regulamento</a>
+        <a class="btn btn-ghost" data-page="pilotos" href="#pilotos">Ver grid 2026</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="home-grid">
+      <a class="home-card" data-page="regulamento" href="#regulamento">
+        <div class="num">01</div>
+        <h3>Regulamento</h3>
+        <p>Regras desportivas e técnicas: formato do fim de semana, pontuação, parc fermé, aerodinâmica, motores híbridos e a nova era 2026.</p>
+      </a>
+      <a class="home-card" data-page="pistas" href="#pistas">
+        <div class="num">02</div>
+        <h3>Pistas</h3>
+        <p>Os circuitos que definem o calendário — de Monza a Interlagos, com a história e as características de cada um.</p>
+      </a>
+      <a class="home-card" data-page="equipes" href="#equipes">
+        <div class="num">03</div>
+        <h3>Equipes</h3>
+        <p>As construtoras que competem na F1 em 2026, de tradições centenárias a estreantes como Audi e Cadillac.</p>
+      </a>
+      <a class="home-card" data-page="carros" href="#carros">
+        <div class="num">04</div>
+        <h3>Carros</h3>
+        <p>Uma página dedicada aos carros de cada equipe, com imagens, identidade visual e informações do projeto.</p>
+      </a>
+      <a class="home-card" data-page="pilotos" href="#pilotos">
+        <div class="num">05</div>
+        <h3>Pilotos</h3>
+        <p>Os 22 nomes que disputam o campeonato de pilotos em 2026, organizados por equipe.</p>
+      </a>
+    </div>
+
+    <div class="home-stats">
+      <div class="stat"><div class="n">76</div><div class="l">temporadas desde 1950</div></div>
+      <div class="stat"><div class="n">11</div><div class="l">equipes em 2026</div></div>
+      <div class="stat"><div class="n">22</div><div class="l">pilotos no grid</div></div>
+      <div class="stat"><div class="n">24</div><div class="l">corridas no calendário</div></div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ REGULAMENTO ============ -->
+<main id="regulamento" class="page">
+  <div class="page-head wrap">
+    <div class="kicker">REGULAMENTO</div>
+    <h1>Regulamento da Fórmula 1</h1>
+    <p>Uma síntese organizada das regras desportivas e técnicas que regem o campeonato — não substitui os documentos oficiais da FIA, mas cobre os pontos essenciais que definem como a Fórmula 1 é disputada.</p>
+  </div>
+
+  <div class="wrap reg-layout">
+    <div class="reg-toc">
+      <div class="reg-toc-label">NESTA PÁGINA</div>
+      <a href="#r1">01 · Visão geral</a>
+      <a href="#r2">02 · Fim de semana</a>
+      <a href="#r3">03 · Sistema de pontos</a>
+      <a href="#r4">04 · Largada e corrida</a>
+      <a href="#r5">05 · Bandeiras e safety car</a>
+      <a href="#r6">06 · Parc fermé e penalidades</a>
+      <a href="#r7">07 · Chassi e aerodinâmica</a>
+      <a href="#r8">08 · Power unit</a>
+      <a href="#r9">09 · Pneus e combustível</a>
+      <a href="#r10">10 · Orçamento (cost cap)</a>
+      <a href="#r11">11 · Nova era 2026</a>
+    </div>
+
+    <div>
+      <div class="reg-block" id="r1">
+        <div class="rb-num">01</div>
+        <h2>Visão geral</h2>
+        <p>A Fórmula 1 é regida por três conjuntos de documentos publicados pela FIA (Federação Internacional de Automobilismo): o <strong>Regulamento Desportivo</strong>, que trata de como as corridas são conduzidas; o <strong>Regulamento Técnico</strong>, que define o que os carros podem e não podem ser; e o <strong>Regulamento Financeiro</strong>, que limita quanto as equipes podem gastar por temporada.</p>
+        <p>Cada temporada é disputada em duas classificações paralelas: o <strong>Campeonato Mundial de Pilotos</strong> e o <strong>Campeonato Mundial de Construtores</strong> (equipes). Os regulamentos são revisados anualmente e passam por reformas estruturais maiores a cada poucos anos — a mais recente entra em vigor em 2026.</p>
+      </div>
+
+      <div class="reg-block" id="r2">
+        <div class="rb-num">02</div>
+        <h2>Formato do fim de semana</h2>
+        <p>Um fim de semana de Grande Prêmio "padrão" segue esta estrutura:</p>
+        <ul>
+          <li><strong>Treino Livre 1 e 2 (sexta-feira)</strong> — sessões de 60 minutos para ajuste de carro e coleta de dados.</li>
+          <li><strong>Treino Livre 3 (sábado de manhã)</strong> — última sessão antes da classificação.</li>
+          <li><strong>Classificação (sábado à tarde)</strong> — dividida em Q1 (18 min, elimina os 5 mais lentos), Q2 (15 min, elimina mais 5) e Q3 (12 min, define a pole entre os 10 restantes).</li>
+          <li><strong>Corrida (domingo)</strong> — disputada na distância mínima de 305 km (260 km em Mônaco), com largada em grid conforme a classificação.</li>
+        </ul>
+        <h4>Formato sprint</h4>
+        <p>Cerca de seis fins de semana por temporada adotam o formato sprint: uma "Sprint Qualifying" na sexta-feira define o grid de uma corrida curta (100 km, sem paradas obrigatórias) no sábado, que por sua vez antecede a classificação tradicional para o Grande Prêmio de domingo.</p>
+      </div>
+
+      <div class="reg-block" id="r3">
+        <div class="rb-num">03</div>
+        <h2>Sistema de pontos</h2>
+        <p>Pontuam os dez primeiros colocados na corrida principal. Um ponto extra é concedido a quem fizer a volta mais rápida da corrida, desde que termine entre os dez primeiros.</p>
+        <div class="table-scroll">
+        <table>
+          <tr><th>Posição</th><th>1º</th><th>2º</th><th>3º</th><th>4º</th><th>5º</th><th>6º</th><th>7º</th><th>8º</th><th>9º</th><th>10º</th></tr>
+          <tr>
+            <td>GP (domingo)</td>
+            <td class="n">25</td><td class="n">18</td><td class="n">15</td><td class="n">12</td><td class="n">10</td>
+            <td class="n">8</td><td class="n">6</td><td class="n">4</td><td class="n">2</td><td class="n">1</td>
+          </tr>
+          <tr>
+            <td>Sprint</td>
+            <td class="n">8</td><td class="n">7</td><td class="n">6</td><td class="n">5</td><td class="n">4</td>
+            <td class="n">3</td><td class="n">2</td><td class="n">1</td><td class="n">—</td><td class="n">—</td>
+          </tr>
+        </table>
+        </div>
+        <p>No Campeonato de Construtores, somam-se os pontos dos dois carros de cada equipe em todas as sessões pontuáveis da temporada.</p>
+      </div>
+
+      <div class="reg-block" id="r4">
+        <div class="rb-num">04</div>
+        <h2>Largada e condução da corrida</h2>
+        <p>A largada é feita com o carro parado, sinalizada pelo apagar simultâneo de cinco luzes vermelhas no pórtico de largada. Ultrapassar antes do apagar das luzes gera penalidade.</p>
+        <h4>DRS (Drag Reduction System)</h4>
+        <p>Sistema que abre a asa traseira em zonas demarcadas da pista, reduzindo arrasto para facilitar ultrapassagens. Só pode ser acionado por um carro a menos de um segundo do carro à frente, em um ponto de detecção definido, e apenas depois das primeiras voltas de corrida.</p>
+        <h4>Paradas obrigatórias</h4>
+        <p>Em corridas secas, cada carro deve usar ao menos dois compostos de pneu diferentes durante a prova, o que obriga a pelo menos uma parada nos boxes.</p>
+      </div>
+
+      <div class="reg-block" id="r5">
+        <div class="rb-num">05</div>
+        <h2>Bandeiras e neutralizações</h2>
+        <ul>
+          <li><strong>Bandeira verde</strong> — pista livre.</li>
+          <li><strong>Bandeira amarela</strong> — perigo à frente, ultrapassagens proibidas no trecho.</li>
+          <li><strong>Bandeira vermelha</strong> — corrida interrompida.</li>
+          <li><strong>Bandeira quadriculada</strong> — fim da sessão.</li>
+          <li><strong>Safety Car</strong> — neutraliza a corrida agrupando o pelotão atrás de um carro de segurança, usado em incidentes que exigem cautela mas não a interrupção total.</li>
+          <li><strong>Virtual Safety Car (VSC)</strong> — neutralização eletrônica: os pilotos devem respeitar um tempo de volta delta sem a presença física de um carro de segurança na pista.</li>
+        </ul>
+      </div>
+
+      <div class="reg-block" id="r6">
+        <div class="rb-num">06</div>
+        <h2>Parc fermé e penalidades</h2>
+        <p>Do início da classificação até a largada da corrida, os carros ficam sob regime de <strong>parc fermé</strong>: alterações mecânicas e de setup são estritamente limitadas, e qualquer ajuste fora do permitido obriga o piloto a largar dos boxes.</p>
+        <h4>Principais penalidades</h4>
+        <ul>
+          <li><strong>Advertência (reprimenda)</strong> — registro formal, sem efeito imediato no resultado.</li>
+          <li><strong>Penalidade de tempo (+5s / +10s)</strong> — somada ao tempo total do piloto.</li>
+          <li><strong>Drive-through / Stop-and-go</strong> — obrigação de passar pelos boxes durante a corrida.</li>
+          <li><strong>Perda de posições no grid</strong> — aplicada por infrações em classificação ou por troca de componentes de power unit acima do limite de uso.</li>
+        </ul>
+      </div>
+
+      <div class="reg-block" id="r7">
+        <div class="rb-num">07</div>
+        <h2>Chassi e aerodinâmica</h2>
+        <p>O regulamento técnico define dimensões máximas de largura, altura e distância entre eixos, além de exigir uma estrutura de sobrevivência (monocoque) capaz de resistir a testes de impacto e esmagamento padronizados pela FIA.</p>
+        <p>O <strong>efeito solo</strong> — geração de carga aerodinâmica através de túneis no assoalho do carro, reintroduzido em 2022 — é a base do desenho atual, substituindo a dependência de asas e defletores externos das gerações anteriores, com o objetivo de permitir que os carros se sigam de perto sem perder tanto desempenho aerodinâmico.</p>
+      </div>
+
+      <div class="reg-block" id="r8">
+        <div class="rb-num">08</div>
+        <h2>Power unit</h2>
+        <p>Desde 2014, os carros usam motores V6 turboalimentados de 1.6 litro combinados a dois sistemas de recuperação de energia elétrica (MGU-K e MGU-H), formando a chamada power unit híbrida. Cada piloto tem um número limitado de componentes de power unit por temporada — ultrapassar esse limite gera penalidade de grid.</p>
+      </div>
+
+      <div class="reg-block" id="r9">
+        <div class="rb-num">09</div>
+        <h2>Pneus e combustível</h2>
+        <p>A Pirelli é a fornecedora única de pneus da categoria, oferecendo compostos slick de C1 (mais duro) a C6 (mais macio), além de pneus intermediários e de chuva. Em cada fim de semana, apenas três compostos secos são disponibilizados, identificados por faixas coloridas.</p>
+        <p>O combustível é limitado em quantidade por corrida e, desde 2022, contém um percentual crescente de componentes renováveis, caminho que culmina no combustível 100% sustentável exigido a partir de 2026.</p>
+      </div>
+
+      <div class="reg-block" id="r10">
+        <div class="rb-num">10</div>
+        <h2>Orçamento (cost cap)</h2>
+        <p>Desde 2021 vigora um teto de gastos (<em>cost cap</em>) que limita o quanto cada equipe pode investir no desenvolvimento e na operação de seus carros por temporada, excluindo salários de pilotos, marketing e alguns custos legados. A medida busca reduzir a distância entre equipes grandes e pequenas e é fiscalizada por auditoria financeira da FIA, com penalidades que vão de multas a perda de pontos.</p>
+      </div>
+
+      <div class="reg-block" id="r11">
+        <div class="rb-num">11</div>
+        <h2>Nova era 2026</h2>
+        <p>A temporada de 2026 marca a reforma regulatória mais profunda desde 2022, com mudanças simultâneas no chassi e na power unit:</p>
+        <ul>
+          <li><strong>Power unit 50/50</strong> — a potência elétrica passa a contribuir com cerca de metade da potência total, eliminando o MGU-H e ampliando fortemente a capacidade do MGU-K.</li>
+          <li><strong>Combustível 100% sustentável</strong> — fim do uso de combustíveis fósseis convencionais na categoria.</li>
+          <li><strong>Carros menores e mais leves</strong> — redução de largura e peso em relação à geração 2022–2025, buscando carros mais ágeis.</li>
+          <li><strong>Aerodinâmica ativa</strong> — asas móveis que alteram automaticamente o nível de carga aerodinâmica entre retas e curvas, substituindo o DRS em sua forma anterior.</li>
+          <li><strong>Novos fabricantes de motor</strong> — entrada da Audi como fabricante própria e chegada da Cadillac como 11ª equipe do grid, inicialmente com motorização Ferrari.</li>
+        </ul>
+        <div class="callout"><strong>Nota:</strong> os regulamentos oficiais completos são publicados pela FIA e somam centenas de páginas técnicas. Esta página resume os pontos estruturais mais relevantes para entender como o campeonato funciona.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ PISTAS ============ -->
+<main id="pistas" class="page">
+  <div class="page-head wrap">
+    <div class="kicker">CIRCUITOS</div>
+    <h1>Pistas</h1>
+    <p>Os traçados que moldaram a história da Fórmula 1 — de ruas urbanas a templos da velocidade, cada um com seu próprio capítulo no automobilismo.</p>
+  </div>
+  <div class="wrap">
+    <div class="card-grid" id="pistas-grid"></div>
+  </div>
+</main>
+
+<!-- ============ EQUIPES ============ -->
+<main id="equipes" class="page">
+  <div class="page-head wrap">
+    <div class="kicker">CONSTRUTORAS</div>
+    <h1>Equipes</h1>
+    <p>As onze equipes que disputam o Campeonato Mundial de Construtores em 2026 — de tradições centenárias a projetos recém-nascidos.</p>
+  </div>
+  <div class="wrap">
+    <div class="card-grid" id="equipes-grid"></div>
+  </div>
+</main>
+
+
+<!-- ============ CARROS ============ -->
+<main id="carros" class="page">
+  <div class="page-head wrap">
+    <div class="kicker">MÁQUINAS</div>
+    <h1>Carros da temporada</h1>
+    <p>Uma galeria visual dos carros de cada equipe. Clique em uma equipe para conhecer sua máquina, cores e pilotos.</p>
+  </div>
+  <div class="wrap">
+    <div class="card-grid" id="carros-grid"></div>
+  </div>
+</main>
+
+<!-- ============ PILOTOS ============ -->
+<main id="pilotos" class="page">
+  <div class="page-head wrap">
+    <div class="kicker">GRID 2026</div>
+    <h1>Pilotos</h1>
+    <p>Os 22 pilotos confirmados para a temporada de 2026, organizados por equipe — o maior grid desde 2016, com a estreia da Cadillac.</p>
+  </div>
+  <div class="wrap" id="pilotos-container"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Guia visual de Fórmula 1 — pistas, equipes, pilotos e carros.</span>
+    <span class="mono">2026 SEASON</span>
+  </div>
+</footer>
+
+4<script>
+/* ============ NAVIGATION ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const target = document.getElementById(id) ? id : 'home';
+  document.getElementById(target).classList.add('active');
+  document.querySelectorAll('.nav-link[data-page="'+target+'"]').forEach(l=>l.classList.add('active'));
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+// Índice interno do regulamento: rolagem suave sem trocar de página
+document.querySelectorAll('.reg-toc a[href^="#r"]').forEach(link=>{
+  link.addEventListener('click', e=>{
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const id = el.getAttribute('data-page');
+    history.replaceState(null,'','#'+id);
+    showPage(id);
+  });
+});
+window.addEventListener('hashchange', ()=>{
+  showPage(location.hash.replace('#','') || 'home');
+});
+
+/* ============ DATA: PISTAS ============ */
+const pistas = [
+  {flag:"🇬🇧", nome:"Silverstone", pais:"Reino Unido", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.webp", ext:"5.891 km", voltas:52, estreia:1950,
+   desc:"Ex-base militar da Royal Air Force, Silverstone recebeu em 1950 a primeira corrida da história do Campeonato Mundial de F1. É considerado o berço espiritual da categoria e abriga a Copse, Maggotts e Becketts, uma das sequências de curvas rápidas mais respeitadas do calendário."},
+  {flag:"🇮🇹", nome:"Monza", pais:"Itália", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Italy_Circuit.webp", ext:"5.793 km", voltas:53, estreia:1950,
+   desc:"Conhecido como o 'Templo da Velocidade', Monza é o circuito com as maiores médias de velocidade do calendário, construído em 1922 dentro de um parque real perto de Milão. É a casa da Ferrari e palco de algumas das celebrações mais emotivas da F1."},
+  {flag:"🇧🇪", nome:"Spa-Francorchamps", pais:"Bélgica", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Belgium_Circuit.webp", ext:"7.004 km", voltas:44, estreia:1950,
+   desc:"Traçado nas florestas das Ardenas, Spa é famoso pela Eau Rouge-Raidillon, uma subida em curva de alta velocidade considerada um dos maiores desafios do automobilismo. Seu clima instável, que pode mudar radicalmente entre setores, é parte de sua lenda."},
+  {flag:"🇲🇨", nome:"Mônaco", pais:"Mônaco", layout:"https://media.formula1.com/image/upload/c_fit,h_704/q_auto/v1740000001/common/f1/2026/track/2026trackmontecarlodetailed.webp", ext:"3.337 km", voltas:78, estreia:1950,
+   desc:"Disputado pelas ruas estreitas do principado desde 1929 (e no calendário da F1 desde 1950), Monte Carlo é o circuito mais lento e mais prestigiado da temporada, onde vencer vale, por tradição, tanto quanto vencer em Indianápolis ou Le Mans."},
+  {flag:"🇯🇵", nome:"Suzuka", pais:"Japão", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Japan_Circuit.webp", ext:"5.807 km", voltas:53, estreia:1987,
+   desc:"Projetado pelo holandês John Hugenholtz com um traçado único em formato de oito (com um cruzamento de pista), Suzuka é adorado por pilotos pela curva 'S' e pela Degner, e já decidiu diversos títulos mundiais, incluindo o dramático acidente entre Senna e Prost em 1990."},
+  {flag:"🇧🇷", nome:"Interlagos", pais:"Brasil", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Brazil_Circuit.webp", ext:"4.309 km", voltas:71, estreia:1973,
+   desc:"O Autódromo José Carlos Pace, no sul de São Paulo, é palco de algumas das corridas mais dramáticas da história, como o título de Ayrton Senna em 1991 e o de Kimi Räikkönen em 2007. Seu sobe-e-desce e o sentido anti-horário exigem carros e pilotos ao limite."},
+  {flag:"🇺🇸", nome:"Circuit of the Americas", pais:"Estados Unidos", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/USA_Circuit.webp", ext:"5.513 km", voltas:56, estreia:2012,
+   desc:"Construído do zero em Austin, Texas, o COTA combina trechos inspirados em Silverstone, Hockenheim e Istambul, com sua íngreme curva 1 inspirada em Eau Rouge. Foi o primeiro circuito construído especificamente para a F1 em solo americano em décadas."},
+  {flag:"🇦🇹", nome:"Red Bull Ring", pais:"Áustria", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Austria_Circuit.webp", ext:"4.318 km", voltas:71, estreia:1970,
+   desc:"Erguido nas montanhas da Estíria, o circuito passou por várias encarnações — Österreichring, A1-Ring — até ser reformado pela Red Bull e reaberto em 2011. É um dos traçados mais curtos do calendário, favorecendo corridas próximas e ultrapassagens."},
+  {flag:"🇭🇺", nome:"Hungaroring", pais:"Hungria", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Hungary_Circuit.webp", ext:"4.381 km", voltas:70, estreia:1986,
+   desc:"Inaugurado em 1986, foi a primeira corrida de F1 realizada no antigo bloco do Leste Europeu. Apelidado de 'Mônaco sem muros' por seu traçado sinuoso e estreito, é tradicionalmente um dos circuitos mais difíceis para ultrapassar do calendário."},
+  {flag:"🇦🇿", nome:"Baku City Circuit", pais:"Azerbaijão", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Baku_Circuit.webp", ext:"6.003 km", voltas:51, estreia:2016,
+   desc:"Circuito de rua na capital do Azerbaijão que combina a reta mais longa do calendário com uma passagem estreitíssima pela cidade antiga muralhada, produzindo uma mistura pouco usual de altíssima velocidade e risco de acidente."},
+  {flag:"🇸🇬", nome:"Marina Bay", pais:"Singapura", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.webp", ext:"4.940 km", voltas:62, estreia:2008,
+   desc:"Sediou em 2008 a primeira corrida noturna da história da F1, disputada sob um dos sistemas de iluminação artificial mais potentes já instalados em um evento esportivo. O calor e a umidade tropicais tornam a prova uma das fisicamente mais exigentes da temporada."},
+  {flag:"🇺🇸", nome:"Las Vegas Strip Circuit", pais:"Estados Unidos", layout:"https://media.formula1.com/image/upload/c_fit,h_704/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Las_Vegas_Circuit.webp", ext:"6.201 km", voltas:50, estreia:2023,
+   desc:"Traçado pelas ruas da Las Vegas Strip, passando em frente a cassinos icônicos, marcou o retorno da F1 à cidade após uma única e conturbada edição em 1981-82, desta vez como uma das apostas mais ambiciosas de expansão da categoria nos Estados Unidos."},
+  {flag:"🇳🇱", nome:"Zandvoort", pais:"Países Baixos", layout:"https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Netherlands_Circuit.webp", ext:"4.259 km", voltas:72, estreia:1952,
+   desc:"Circuito nas dunas costeiras holandesas, ausente do calendário entre 1985 e 2020. Seu retorno, embalado pela ascensão de Max Verstappen, trouxe curvas com banqueamento acentuado, como a Arie Luyendyk Bocht, incomuns no traçado moderno da F1."},
+  {flag:"🇮🇹", nome:"Imola", pais:"Itália", layout:"https://media.formula1.com/image/upload/c_fit,h_704/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Emilia_Romagna_Circuit.webp", ext:"4.909 km", voltas:63, estreia:1980,
+   desc:"O Autodromo Enzo e Dino Ferrari é um dos circuitos mais tradicionais e também mais marcantes da história da categoria, palco do fim de semana de 1994 em que Ayrton Senna perdeu a vida, um marco que mudou permanentemente os padrões de segurança da F1."}
+];
+
+const pistasGrid = document.getElementById('pistas-grid');
+pistas.forEach(p=>{
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    ${p.layout ? `<img class="track-layout" src="${p.layout}" alt="Traçado do circuito de ${p.nome}" loading="lazy" onerror="imgFallback(this, 'track', 'Traçado de ${p.nome}')">` : `<div class="track-layout"></div>`}
+    <div class="track-layout-label">TRAÇADO DO CIRCUITO</div>
+    <div class="card-top">
+      <div>
+        <h3>${p.nome}</h3>
+        <div class="subtitle">${p.pais}</div>
+      </div>
+      <div class="card-flag">${p.flag}</div>
+    </div>
+    <p class="desc">${p.desc}</p>
+    <div class="stat-row">
+      <div><span class="v">${p.ext}</span><span class="k">extensão</span></div>
+      <div><span class="v">${p.voltas}</span><span class="k">voltas</span></div>
+      <div><span class="v">${p.estreia}</span><span class="k">estreia na F1</span></div>
+    </div>
+  `;
+  pistasGrid.appendChild(el);
+});
+
+/* ============ DATA: EQUIPES ============ */
+const equipes = [
+  {cor:"#E80020", nome:"Scuderia Ferrari", pais:"Itália 🇮🇹", fundacao:1929, estreia:1950, titulos:"16 de construtores",
+   desc:"Fundada por Enzo Ferrari e única equipe presente em todas as temporadas da F1 desde 1950, a Scuderia é a construtora mais bem-sucedida e mais tradicional da história da categoria, símbolo maior da paixão italiana pelo automobilismo."},
+  {cor:"#F47600", nome:"McLaren", pais:"Reino Unido 🇬🇧", fundacao:1963, estreia:1966, titulos:"9 de construtores",
+   desc:"Fundada pelo neozelandês Bruce McLaren, é a segunda equipe mais vitoriosa da história da F1, associada a pilotos como Senna, Prost, Häkkinen e Hamilton. Retomou o topo do grid em 2024 e 2025, conquistando o bicampeonato de construtores."},
+  {cor:"#27F4D2", nome:"Mercedes-AMG Petronas", pais:"Alemanha 🇩🇪", fundacao:1954, estreia:2010, titulos:"8 de construtores",
+   desc:"A Mercedes participou da F1 nos anos 1950 antes de se retirar após a tragédia de Le Mans de 1955. Retornou como equipe própria em 2010 e, sob o comando de Toto Wolff, dominou a era híbrida a partir de 2014 com sete títulos consecutivos de construtores."},
+  {cor:"#4781D7", nome:"Red Bull Racing", pais:"Áustria 🇦🇹", fundacao:2005, estreia:2005, titulos:"6 de construtores",
+   desc:"Nascida da compra da extinta equipe Jaguar Racing pela fabricante de bebidas energéticas austríaca, a Red Bull se tornou uma potência a partir de 2009 sob o comando técnico de Adrian Newey, vencendo títulos com Vettel e, na década seguinte, com Max Verstappen."},
+  {cor:"#1868DB", nome:"Williams", pais:"Reino Unido 🇬🇧", fundacao:1977, estreia:1977, titulos:"9 de construtores",
+   desc:"Fundada por Frank Williams, é uma das equipes independentes mais vitoriosas da história, com pilotos como Mansell, Prost, Hill e Villeneuve. Após décadas de dificuldades financeiras, vive um processo de reconstrução desde a aquisição pelo grupo Dorilton Capital."},
+  {cor:"#229971", nome:"Aston Martin", pais:"Reino Unido 🇬🇧", fundacao:2018, estreia:1959, titulos:"—",
+   desc:"A equipe atual descende da Jordan Grand Prix, passando por Midland, Spyker, Force India e Racing Point antes de adotar o nome Aston Martin em 2021. Sob o comando do bilionário Lawrence Stroll, investiu pesadamente em infraestrutura e contratou Adrian Newey para 2026."},
+  {cor:"#00A1E8", nome:"Alpine", pais:"França 🇫🇷", fundacao:2021, estreia:1977, titulos:"2 de construtores",
+   desc:"A base da equipe remonta à Toleman, Benetton e Renault, que venceu títulos com Schumacher e Alonso. Rebatizada Alpine em 2021 pela Renault para promover sua marca esportiva, mantém motorização própria francesa em meio a reestruturações frequentes."},
+  {cor:"#9C9FA2", nome:"Haas F1 Team", pais:"Estados Unidos 🇺🇸", fundacao:2016, estreia:2016, titulos:"—",
+   desc:"Fundada pelo empresário americano Gene Haas, foi por quase uma década a única equipe americana no grid, operando com estrutura enxuta e forte parceria técnica com a Ferrari, cujo modelo de motor e componentes utiliza sob as regras do regulamento."},
+  {cor:"#6C98FF", nome:"Racing Bulls", pais:"Itália 🇮🇹", fundacao:1985, estreia:1985, titulos:"—",
+   desc:"Descendente direta da Minardi, equipe italiana símbolo da luta das pequenas construtoras, foi comprada pela Red Bull em 2006 e rebatizada sucessivamente Toro Rosso, AlphaTauri e, por fim, Racing Bulls, funcionando como equipe irmã e formadora de jovens talentos."},
+  {cor:"#00205B", nome:"Audi", pais:"Alemanha/Suíça 🇩🇪🇨🇭", fundacao:1970, estreia:1993, titulos:"—",
+   desc:"A estrutura por trás da entrada da Audi remonta à Sauber suíça, fundada por Peter Sauber, que também operou como BMW Sauber e Alfa Romeo. A partir de 2026 a equipe passa a correr sob a marca dos quatro anéis, com a Audi assumindo o desenvolvimento próprio da power unit."},
+  {cor:"#B8860B", nome:"Cadillac F1 Team", pais:"Estados Unidos 🇺🇸", fundacao:2026, estreia:2026, titulos:"—",
+   desc:"Décima primeira equipe do grid, estreante em 2026, é apoiada pela General Motors e pela TWG Motorsports. Inicia sua trajetória usando motores Ferrari enquanto desenvolve uma power unit própria, marcando o primeiro projeto de fábrica americano na categoria em décadas."}
+];
+
+const equipesGrid = document.getElementById('equipes-grid');
+equipes.forEach(t=>{
+  const el = document.createElement('div');
+  el.className = 'card team-card';
+  el.style.setProperty('--accent', t.cor);
+  el.innerHTML = `
+    <div class="card-top">
+      <div>
+        <h3>${t.nome}</h3>
+        <div class="subtitle">${t.pais}</div>
+      </div>
+    </div>
+    <div class="team-meta">
+      <span>Fundação: <b>${t.fundacao}</b></span>
+      <span>Estreia na F1: <b>${t.estreia}</b></span>
+      <span>Títulos: <b>${t.titulos}</b></span>
+    </div>
+    <p class="desc">${t.desc}</p>
+  `;
+  equipesGrid.appendChild(el);
+});
+
+/* ============ DATA: PILOTOS (agrupados por equipe, ordem do grid 2026) ============ */
+const grid2026 = [
+  {equipe:"McLaren", cor:"#F47600", pilotos:[
+    {nome:"Lando Norris", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/mclaren/lannor01/2026mclarenlannor01right.webp", nat:"🇬🇧 Reino Unido", bio:"Campeão mundial de 2025, entra em sua sétima temporada na McLaren, equipe pela qual correu desde sua estreia na F1 em 2019. Conhecido pelo estilo suave ao volante e pela pilotagem consistente sob pressão."},
+    {nome:"Oscar Piastri", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/mclaren/oscpia01/2026mclarenoscpia01right.webp", nat:"🇦🇺 Austrália", bio:"Revelado pela academia de jovens pilotos da Alpine, chegou à F1 em 2023 com a McLaren após vencer os títulos de Fórmula 3 e Fórmula 2 em anos consecutivos, tornando-se rapidamente um dos pilotos mais rápidos e frios do grid."}
+  ]},
+  {equipe:"Ferrari", cor:"#E80020", pilotos:[
+    {nome:"Lewis Hamilton", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/ferrari/lewham01/2026ferrarilewham01right.webp", nat:"🇬🇧 Reino Unido", bio:"Heptacampeão mundial e o piloto com mais vitórias e poles da história da F1, deixou a Mercedes após uma década de domínio para se juntar à Ferrari em 2025, buscando o título que falta em seu currículo com a equipe mais tradicional da categoria."},
+    {nome:"Charles Leclerc", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/ferrari/chalec01/2026ferrarichalec01right.webp", nat:"🇲🇨 Mônaco", bio:"Na Ferrari desde 2019, é considerado um dos volantes mais talentosos de sua geração em uma volta única, com múltiplas vitórias em seu próprio Grande Prêmio de Mônaco e um contrato de longo prazo que o liga à equipe até o fim da década."}
+  ]},
+  {equipe:"Red Bull Racing", cor:"#4781D7", pilotos:[
+    {nome:"Max Verstappen", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/redbullracing/maxver01/2026redbullracingmaxver01right.webp", nat:"🇳🇱 Países Baixos", bio:"Tetracampeão mundial (2021-2024) e um dos pilotos mais dominantes da história recente da categoria, é filho do ex-piloto de F1 Jos Verstappen e o mais jovem estreante da história da F1 ao debutar aos 17 anos."},
+    {nome:"Isack Hadjar", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/redbullracing/isahad01/2026redbullracingisahad01right.webp", nat:"🇫🇷 França", bio:"Promovido à equipe principal da Red Bull após uma temporada de estreia impressionante em 2025 pela Racing Bulls, torna-se o novo companheiro de Verstappen para 2026, um dos postos mais cobiçados e desafiadores do grid."}
+  ]},
+  {equipe:"Mercedes", cor:"#27F4D2", pilotos:[
+    {nome:"George Russell", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/mercedes/georus01/2026mercedesgeorus01right.webp", nat:"🇬🇧 Reino Unido", bio:"Formado pela academia de jovens da Mercedes e campeão de Fórmula 2 e Fórmula 3, assumiu o posto de líder da equipe após a saída de Hamilton, acumulando vitórias e a responsabilidade de reconduzir a Mercedes ao topo."},
+    {nome:"Kimi Antonelli", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/mercedes/andant01/2026mercedesandant01right.webp", nat:"🇮🇹 Itália", bio:"Um dos maiores prodígios da base da Mercedes, chegou à F1 em 2025 ainda muito jovem e rapidamente somou pole na sprint e pódios em sua temporada de estreia, sendo visto como um possível futuro campeão da categoria."}
+  ]},
+  {equipe:"Aston Martin", cor:"#229971", pilotos:[
+    {nome:"Fernando Alonso", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/astonmartin/feralo01/2026astonmartinferalo01right.webp", nat:"🇪🇸 Espanha", bio:"Bicampeão mundial (2005-2006) e detentor do recorde histórico de largadas na F1, segue competindo com a mesma fome de décadas atrás, agora na Aston Martin, na esperança de que o projeto liderado por Adrian Newey lhe traga uma terceira coroa."},
+    {nome:"Lance Stroll", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/astonmartin/lanstr01/2026astonmartinlanstr01right.webp", nat:"🇨🇦 Canadá", bio:"Filho do dono da equipe, Lawrence Stroll, corre pela Aston Martin desde sua fundação sob esse nome, acumulando experiência de várias temporadas no grid ao lado de pilotos de ponta como Alonso."}
+  ]},
+  {equipe:"Williams", cor:"#1868DB", pilotos:[
+    {nome:"Alex Albon", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/williams/alealb01/2026williamsalealb01right.webp", nat:"🇹🇭 Tailândia", bio:"Ex-piloto da Red Bull, reconstruiu sua carreira na Williams a partir de 2022, tornando-se uma peça-chave no processo de recuperação da tradicional equipe britânica e um dos pilotos mais consistentes fora dos times de ponta."},
+    {nome:"Carlos Sainz", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/williams/carsai01/2026williamscarsai01right.webp", nat:"🇪🇸 Espanha", bio:"Multivencedor de Grandes Prêmios por Ferrari e McLaren, chega à Williams em 2026 trazendo experiência de equipes de ponta, reforçando as ambições da equipe britânica de voltar a brigar de forma regular pelo topo."}
+  ]},
+  {equipe:"Alpine", cor:"#00A1E8", pilotos:[
+    {nome:"Pierre Gasly", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/alpine/piegas01/2026alpinepiegas01right.webp", nat:"🇫🇷 França", bio:"Vencedor de Grande Prêmio pela extinta Toro Rosso/AlphaTauri, tornou-se referência de liderança técnica na Alpine, equipe que representa suas raízes francesas e pela qual renovou contrato de longo prazo."},
+    {nome:"Franco Colapinto", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/alpine/fracol01/2026alpinefracol01right.webp", nat:"🇦🇷 Argentina", bio:"Chamado às pressas para substituir um companheiro em 2024, impressionou o suficiente para garantir um assento fixo na Alpine, tornando-se o piloto argentino mais em evidência na F1 desde a era de Carlos Reutemann."}
+  ]},
+  {equipe:"Racing Bulls", cor:"#6C98FF", pilotos:[
+    {nome:"Liam Lawson", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/racingbulls/lialaw01/2026racingbullslialaw01right.webp", nat:"🇳🇿 Nova Zelândia", bio:"Parte do programa de jovens pilotos da Red Bull, teve passagens por diferentes equipes do grupo antes de se firmar na Racing Bulls, servindo como referência de experiência para a equipe em 2026."},
+    {nome:"Arvid Lindblad", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/racingbulls/arvlin01/2026racingbullsarvlin01right.webp", nat:"🇬🇧 Reino Unido", bio:"Estreante da temporada 2026 e um dos pilotos mais jovens do grid, chega após conquistar vitórias na Fórmula 2 com apenas uma temporada completa na categoria de acesso, sinal da aposta da Red Bull em seu potencial."}
+  ]},
+  {equipe:"Haas", cor:"#9C9FA2", pilotos:[
+    {nome:"Oliver Bearman", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/haas/olibea01/2026haasolibea01right.webp", nat:"🇬🇧 Reino Unido", bio:"Ganhou notoriedade ao substituir Carlos Sainz na Ferrari em 2024 sem qualquer treino prévio no carro, atuação que lhe garantiu um assento fixo na Haas, onde despontou como um dos rookies mais sólidos de sua geração."},
+    {nome:"Esteban Ocon", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/haas/estoco01/2026haasestoco01right.webp", nat:"🇫🇷 França", bio:"Vencedor de Grande Prêmio pela Alpine, trouxe experiência de equipe de ponta para a Haas a partir de 2025, formando com Bearman uma dupla jovem com o objetivo de consolidar a equipe no meio do pelotão."}
+  ]},
+  {equipe:"Audi", cor:"#00205B", pilotos:[
+    {nome:"Nico Hülkenberg", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/audi/nichul01/2026audinichul01right.webp", nat:"🇩🇪 Alemanha", bio:"Um dos pilotos mais experientes do grid, retornou à F1 em 2023 após período como reserva e finalmente conquistou seu primeiro pódio na carreira em 2025, aos 37 anos, liderando a transição da equipe para a marca Audi."},
+    {nome:"Gabriel Bortoleto", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/audi/gabbor01/2026audigabbor01right.webp", nat:"🇧🇷 Brasil", bio:"Campeão de Fórmula 2 em 2024, chegou à F1 em 2025 como um dos pilotos brasileiros mais promissores desde a geração de Massa, e segue na equipe em sua transição para o projeto Audi."}
+  ]},
+  {equipe:"Cadillac", cor:"#B8860B", pilotos:[
+    {nome:"Valtteri Bottas", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/cadillac/valbot01/2026cadillacvalbot01right.webp", nat:"🇫🇮 Finlândia", bio:"Ex-piloto da Mercedes, onde foi vice-campeão mundial por duas vezes como companheiro de Hamilton, retorna como titular em 2026 para liderar o projeto de estreia da Cadillac com sua vasta experiência de equipe de ponta."},
+    {nome:"Sergio Pérez", foto:"https://media.formula1.com/image/upload/c_fill,w_720/q_auto/v1740000001/common/f1/2026/cadillac/serper01/2026cadillacserper01right.webp", nat:"🇲🇽 México", bio:"Multivencedor de Grandes Prêmios e ex-piloto da Red Bull, volta à ativa em 2026 após um ano afastado para ser peça central no lançamento da Cadillac, trazendo uma das trajetórias mais longevas do grid atual."}
+  ]}
+];
+
+const pilotosContainer = document.getElementById('pilotos-container');
+grid2026.forEach(g=>{
+  const group = document.createElement('div');
+  group.className = 'team-group';
+  const driversHtml = g.pilotos.map(d=>`
+    <div class="driver-card">
+      <img class="driver-photo" src="${d.foto}" alt="Foto de ${d.nome}" onerror="imgFallback(this, 'driver', '${d.nome}')">
+      <div class="driver-info">
+        <h4>${d.nome}</h4>
+        <div class="nat">${d.nat}</div>
+        <p>${d.bio}</p>
+      </div>
+    </div>
+  `).join('');
+  group.innerHTML = `
+    <div class="team-group-head">
+      <span class="team-swatch" style="background:${g.cor}"></span>
+      <h2>${g.equipe}</h2>
+      <span class="tg-meta">2026</span>
+    </div>
+    <div class="driver-grid">${driversHtml}</div>
+  `;
+  pilotosContainer.appendChild(group);
+});
+
+
+/* ============ DATA: CARROS ============ */
+const carros = [
+  {equipe:"McLaren", cor:"#F47600", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/mclaren/2025mclarenlogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/fom-website/2026/Barcelona%20Shakedown/AOC-44.webp", modelo:"MCL40", pilotos:"Lando Norris · Oscar Piastri", desc:"Carro da McLaren para a temporada, com a identidade laranja papaya e foco em eficiência aerodinâmica."},
+  {equipe:"Ferrari", cor:"#E80020", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/ferrari/2025ferrarilogolight.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan___Practice/2268572376.webp", modelo:"SF-26", pilotos:"Lewis Hamilton · Charles Leclerc", desc:"A máquina da Scuderia Ferrari, marcada pelo tradicional vermelho e pelo símbolo do Cavallino Rampante."},
+  {equipe:"Red Bull Racing", cor:"#4781D7", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/redbullracing/2025redbullracinglogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan___Qualifying/2268728198.webp", modelo:"RB22", pilotos:"Max Verstappen · Isack Hadjar", desc:"Projeto da Red Bull com foco em eficiência aerodinâmica, alta carga e desempenho em diferentes tipos de circuito."},
+  {equipe:"Mercedes", cor:"#27F4D2", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/mercedes/2025mercedeslogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan___Practice/2268554779.webp", modelo:"W17", pilotos:"George Russell · Kimi Antonelli", desc:"A máquina prateada da Mercedes, combinando a identidade da marca com a tecnologia híbrida da F1."},
+  {equipe:"Aston Martin", cor:"#229971", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/astonmartin/2025astonmartinlogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan___Qualifying/2268728398.webp", modelo:"AMR26", pilotos:"Fernando Alonso · Lance Stroll", desc:"Carro verde da Aston Martin, projeto associado ao novo ciclo técnico e à expansão da infraestrutura da equipe."},
+  {equipe:"Williams", cor:"#1868DB", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/williams/2025williamslogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan/2268884877.webp", modelo:"FW48", pilotos:"Alex Albon · Carlos Sainz", desc:"A tradicional equipe britânica mantém sua identidade azul e busca evolução contínua do pacote aerodinâmico."},
+  {equipe:"Alpine", cor:"#00A1E8", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/alpine/2025alpinelogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Australia/2265359570.webp", modelo:"A526", pilotos:"Pierre Gasly · Franco Colapinto", desc:"Máquina azul e rosa da Alpine, representando a marca francesa na Fórmula 1."},
+  {equipe:"Racing Bulls", cor:"#6C98FF", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/racingbulls/2025racingbullslogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9North/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan___Practice/2268544506.webp", modelo:"VCARB 03", pilotos:"Liam Lawson · Arvid Lindblad", desc:"Projeto da equipe italiana ligada à Red Bull, com visual marcante e foco no desenvolvimento de jovens pilotos."},
+  {equipe:"Haas", cor:"#9C9FA2", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2025/haas/2025haaslogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/F1_Grand_Prix_Of_Japan/2268876176.webp", modelo:"VF-26", pilotos:"Oliver Bearman · Esteban Ocon", desc:"Carro da equipe americana, que combina estrutura enxuta com parceria técnica para disputar o meio do grid."},
+  {equipe:"Audi", cor:"#00205B", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2026/audi/2026audilogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9North/c_fit,w_3200,h_1800/q_auto/v1740000001/trackside-images/2026/Formula_1_Testing_in_Bahrain___Day_2/2262497656.webp", modelo:"R26", pilotos:"Nico Hülkenberg · Gabriel Bortoleto", desc:"Projeto da Audi para sua entrada oficial na F1, herdando a estrutura da Sauber e adotando a identidade dos quatro anéis."},
+  {equipe:"Cadillac", cor:"#B8860B", logo:"https://media.formula1.com/image/upload/c_fit,h_64/q_auto/v1740000001/common/f1/2026/cadillac/2026cadillaclogowhite.svg", car:"https://media.formula1.com/image/upload/t_16by9Centre/c_fit,w_3392,h_1908/q_auto/v1740000001/fom-website/2026/Barcelona%20Shakedown/AOC-47.webp", modelo:"Cadillac F1", pilotos:"Valtteri Bottas · Sergio Pérez", desc:"Novo projeto americano da Cadillac, apresentado como a 11ª equipe do grid da temporada."}
+];
+
+const carrosGrid = document.getElementById('carros-grid');
+carros.forEach(c=>{
+  const el = document.createElement('div');
+  el.className = 'card team-card';
+  el.style.setProperty('--accent', c.cor);
+  el.innerHTML = `
+    <img class="team-logo" src="${c.logo}" alt="Logo ${c.equipe}" onerror="imgFallback(this, 'logo', 'Logo ${c.equipe}')">
+    <h3>${c.equipe}</h3>
+    <div class="subtitle">${c.modelo}</div>
+    <img class="team-car" src="${c.car}" alt="Carro ${c.equipe}" decoding="async" onerror="imgFallback(this, 'car', 'Carro ${c.equipe}')">
+    <p class="desc">${c.desc}</p>
+    <div class="stat-row">
+      <div><span class="v">${c.pilotos}</span><span class="k">pilotos</span></div>
+    </div>
+  `;
+  carrosGrid.appendChild(el);
+});
+
+function imgFallback(img, tipo, texto){
+  if(!img || img.dataset.fallback) return;
+  img.dataset.fallback = '1';
+  const label = (texto || tipo || 'F1').replace(/[&<>]/g,'');
+  const esc = label.replace(/"/g,'&quot;');
+  const bg = tipo === 'car' ? '#11151d' : tipo === 'logo' ? '#0b0f15' : '#161b24';
+  let svg;
+  if(tipo === 'driver'){
+    const parts = label.trim().split(/\s+/);
+    const initials = ((parts[0]?.[0]||'') + (parts[parts.length-1]?.[0]||'')).toUpperCase();
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#151a22"/><stop offset="1" stop-color="#303846"/></linearGradient></defs><rect width="720" height="720" fill="url(#g)"/><circle cx="360" cy="270" r="112" fill="#d7dbe0" opacity=".92"/><path d="M205 650c15-145 82-220 155-220s140 75 155 220z" fill="#e10600"/><circle cx="360" cy="265" r="82" fill="#b7bec7"/><path d="M278 250c15-72 60-105 111-105 49 0 91 31 105 96-50-29-120-25-216 9z" fill="#20242b"/><text x="360" y="335" text-anchor="middle" font-family="Arial,sans-serif" font-size="58" font-weight="800" fill="#fff">${initials}</text><text x="360" y="690" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#fff">${esc}</text></svg>`;
+  } else if(tipo === 'logo'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260"><rect width="900" height="260" rx="28" fill="#10151c"/><path d="M90 170L160 80h70l-45 60h150l-30 30z" fill="#e10600"/><text x="450" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="900" fill="#fff">${esc}</text></svg>`;
+  } else {
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700"><rect width="1200" height="700" fill="${bg}"/><circle cx="600" cy="300" r="150" fill="#e10600" opacity=".12"/><text x="600" y="315" text-anchor="middle" font-size="150" font-family="Arial" font-weight="900" fill="#e10600">F1</text><text x="600" y="520" text-anchor="middle" fill="white" font-family="Arial" font-size="42" font-weight="700">${esc}</text><text x="600" y="575" text-anchor="middle" fill="#aeb7c4" font-family="Arial" font-size="24">Imagem indisponível</text></svg>`;
+  }
+  img.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+/* init */
+showPage(location.hash.replace('#','') || 'home');
+</script>
+
+<script src="f1-extras.js" defer></script>
+
+</body>
+</html>
